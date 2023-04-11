@@ -124,13 +124,13 @@ How the parsing works:
 * All `XYZCommandParser` classes (e.g., `AddPairCommandParser`, `DeletePairCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : [`Model.java`](https://github.com/AY2223S2-CS2103T-W12-1/tp/blob/master/src/main/java/seedu/address/model/Model.java)
 
 <img src="images/developerGuide/ModelDiagram.png" width="600" />
 
 The `Model` component,
 
-* stores the address book data i.e., all `Elderly`, `Volunteer` and `Pair` objects (which are contained in a `UniqueElderlyList`, `UniqueVolunteerList` and `UniquePairList` objects respectively).
+* stores `FriendlyLink` data i.e., all `Elderly`, `Volunteer` and `Pair` objects (which are contained in a `UniqueElderlyList`, `UniqueVolunteerList` and `UniquePairList` objects respectively).
 * stores the currently 'selected' `Elderly`, `Volunteer` and `Pair` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Elderly>`,  `ObservableList<Volunteer>` and `ObservableList<Pair>` respectively  that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * depends on some classes in the `Storage` component (because the `Model` component requires `Storage` to save/retrieve objects that belong to the `Model`)
@@ -185,7 +185,7 @@ The Elderly and Volunteers are stored in separate `UniquePersonList` lists.
 * Allows for filtering to display a subset of Elderly or Volunteers in UI.
 * Allows for easy retrieval of information for pairing.
 
-The `delete_elderly` and `delete_volunteer` commands make use of `NRIC`
+The `delete_elderly` and `delete_volunteer` commands make use of the `NRIC`
 attribute of Elderly and Volunteer.
 FriendlyLink retrieves the target person uniquely identified by its NRIC,
 and removes it from the database.
@@ -193,13 +193,13 @@ and removes it from the database.
 * Allows more efficient deletion compare to index-based deletion.
 * The user don't need to check the index of the target person before deletion.
 
-If the deleted Elderly or Volunteer has existing pairing, the associated
+If the deleted Elderly or Volunteer has existing pairings, the associated
 pairs will be automatically removed as well.
 
 ### Command Recommendation and Autocompletion of Field's Prefixes
 
-Both autocompletion and recommendation is facilitated by `CommandRecommendationEngine.java`. The Logic component registers 
-individual command parsers, which implement the Parser interface, to enable recommendations of command inputs. Each parser,
+Both autocompletion and recommendation are facilitated by `CommandRecommendationEngine.java`. The Logic component registers 
+individual command parsers, which implement the `Parser` interface, to enable recommendations of command inputs. Each parser,
 such as `{XYZ}CommandParser`, specifies how recommendation should differ for a specific command by overriding the 
 `Parser#getCommandInfo` method. When the user types a valid command, the `CommandBox` UI component detects the keystroke 
 through its `KeyPressedHandler` and triggers the `CommandRecommendationEngine#generateCommandRecommendations` method. 
@@ -234,8 +234,8 @@ Aspect: How recommendation executes:
 ### Edit by index & NRIC
 
 In FriendlyLink, there are 2 methods to  choose which elderly/volunteer to edit:
-- via **index** using the `edit_elderly` and `edit_volunteer` commands
-- via **NRIC** using the `edit` command
+- via **index** using the `edit_elderly` and `edit_volunteer` commands.
+- via **NRIC** using the `edit` command.
 
 Similar to adding elderly/volunteers, editing is done by specifying the desired field(s) to edit using their prefixes, 
 and then providing the new value for the field(s). For consistency, the prefixes between the adding and 
@@ -249,7 +249,7 @@ Retrieving of the desired `Elderly`/`Volunteer` to edit is done differently
 depending on whether `edit_elderly`/`edit_volunteer`
 or `edit` is called:
 - `edit_elderly`/`edit_volunteer`: The `Elderly`/`Volunteer` is retrieved directly from
-the `filteredElderly`/`filteredVolunteer` of `Model`
+the `filteredElderly`/`filteredVolunteer` of `Model`.
 - `edit`: We first check if an `Elderly` with the specified NRIC exists in `Model`. 
 If so, we retrieve it; Otherwise, we perform a similar check for `Volunteer`, and retrieve it if 
 such a `Volunteer` exists.
@@ -262,7 +262,7 @@ with the values specified in the `EditDescriptor`
 - `createEditedVolunteer(Volunteer, EditDescriptor)`: returns a `Volunteer` representing the given `Volunteer` modified 
 with the values specified in the `EditDescriptor`
 
-The `Elderly`/`Volunteer` and then edited in the model using the `setElderly`/`setVolunteer` methods
+The `Elderly`/`Volunteer` are then edited in the model using the `setElderly`/`setVolunteer` methods
 of `Model` respectively.
 
 Design decisions:
@@ -286,9 +286,9 @@ The results of the ```find``` command are displayed as the filtered version of t
 together with the number of entities listed being shown in the command result box.
 
 Volunteers and elderly who match all the provided attributes that they have are filtered out and displayed in their respective list.
-For each filtered person, Any pairing that they are involve in would be filtered and displayed in the pair list.
+For each filtered person, Any pairings that they are involved in will be filtered and displayed in the pair list.
 
-Arguments for the ```find``` command involves at least one of the attributes belonging to an elderly or a volunteer.
+Arguments for the ```find``` command involve at least one of the attributes belonging to an elderly or a volunteer.
 Any number of attributes can be specified but if multiple of the same attribute is specified then only the last one will be
 used in the search.
 
@@ -316,7 +316,7 @@ Design decisions:
   - The search should narrow the field with each additional new attribute for a more targeted result.
 - Related pairings are also shown during the search.
   - Provides a comprehensive search results where all information related to the people found are shown.
-- People with Available dates that contain the specified dates or have no available dates will be found when searching with the specified dates.
+- People with available dates that contain the specified dates or have no available dates will be found when searching with the specified dates.
   - They are found because they are available on the specified dates.
 
 ### Pairing and unpairing of elderly and volunteers
@@ -350,7 +350,8 @@ The `Summary` object
 
 <img src="images/developerGuide/StatsCommandClassDiagram.png" width="500" />
 
-The `StatsCommand` keeps a `Summary` object. When `StatsCommand`'s `execute` method is called, it creates all the `AggregateFunctions` with appropriate arguments and passes them to the `Summary` to be described.
+The `StatsCommand` keeps a `Summary` object. When `StatsCommand`'s `execute` method is called, it creates all the `AggregateFunction`s with appropriate arguments and passes them to the `Summary` to be described.
+
 <img src="images/developerGuide/StatsSequenceDiagram.png" width="500" />
  
 ### Storage
@@ -369,8 +370,8 @@ Persons saved contains all their attributes such as name, NRIC, in JSON format.
 Pairs saved only contains the NRIC of the elderly and volunteer in JSON format.
 
 **Reasons**
-* Reduce space needed to store pairs
-* Reduce chance of inconsistent data between a person and the corresponding pair,
+* Reduce space needed to store pairs.
+* Reduce chance of inconsistent data between a person and the corresponding pair.
 * Reduce number of files to amend manually when updating person information.
 
 **Implications**
@@ -792,14 +793,14 @@ Preconditions: Person is already in FL.
 ### Non-Functional Requirements
 
 1. FriendlyLink should work on Microsoft Windows, macOS, and Linux that has `Java 11` is installed.
-1. FriendlyLink Should be able to hold up to 100 person (elderly and volunteer) without incurring a delay larger than 3 second for any command.
+1. FriendlyLink should be able to hold up to 100 person (elderly and volunteer) without incurring a delay larger than 3 second for any command.
 1. A user with above average typing speed (40wpm) for regular English text (i.e. not code, not system admin commands) should be able to perform at least 75% of use cases faster using commands instead of using the mouse.
-1. FriendlyLink will perform minimal checks on correctness of details entered into FriendlyLink (as specified in the user guide advanced section).
+1. FriendlyLink will perform minimal checks on correctness of details entered into FriendlyLink.
 1. FriendlyLink will not be responsible for the privacy and security of the data stored in FriendlyLink.
 1. FriendlyLink will not recover from corrupted data files.
-1. FriendlyLink will only available in English.
+1. FriendlyLink will only be available in English.
 1. FriendlyLink does not require internet connection to work.
-1. FriendlyLink is meant for VWOs in Singapore to contain information of and pair elderly and volunteers.
+1. FriendlyLink is meant for VWOs in Singapore to store information about elderly and volunteers, and pair them up.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -1005,67 +1006,95 @@ We are continuously searching for better pairing algorithms.
 ### Enhance available dates feature
 
 Currently, available dates take in dates and not time of day.
-We should improve it to also allow users to enter time into the availability fields, such as YYYY-MM-DD HH:MM:SS to provide greater flexibility in specifying availability period.
+We should improve it to also allow users to enter time into the availability fields, such as `YYYY-MM-DD HH:MM:SS` to provide greater flexibility in specifying availability period.
 
 ### Enhance name to accept special characters
 
 Currently, names do not accept `.` and `\\`. This may cause some problems where a person's legal name contains these special characters.
 We should modify the name to accept these special characters.
 
+### Enhance warning message for input validation
+
+Currently, when a wrong command or prefix is entered, the input will simply turn red. While this may be intuitive for experienced users,
+it may not provide the best experience for new users. As such, we intend to implement a feature which can convert the current recommendation
+feature to also display the warning. For example, if the user enters `add_person`, this is currently an invalid command,
+so the corresponding error message will be displayed in the same text box (replacing the command recommendation).
+
 -----------------------------------------------------
 
 ## Appendix: Efforts
 
-1. Adding records:
-  1. This task is of medium difficulty. We managed to implement a variety of attribute fields, such as available dates as date ranges, medical qualifications as tags, and regions as enums. 
-  2. Given the different attribute data type, transferring these fields into formats adaptable for JSON storage become the main challange.
-  3. Furthermore, as we made many of the fields optional, making the tracking and recording of fields with `NULL` values compatible with JSON, given the various data types, becomes another challenge.
-  4. Despite these challenges, we successfully added comprehensive and flexible record-keeping capabilities to the system.
+**Adding records**
 
-2. Deleting records: 
-  1. This task is of medium difficulty. We managed to implement logic checks ensuring the logical correctness of deletion. For example, when deleting an elderly record, we also had to delete all of its existing pairs. To ensure the accuracy  and correctness, we wrote many unit test cases. 
-  2. Through careful testing and debugging, we successfully implemented a reliable and robust deletion feature.
+1. This task is of medium difficulty. We managed to implement a variety of attribute fields, such as available dates as date ranges, medical qualifications as tags, and regions as enums. 
+2. Given the different attribute data types, transferring these fields into formats adaptable for JSON storage become the main challenge.
+3. Furthermore, as we made many of the fields optional, making the tracking and recording of fields with `NULL` values compatible with JSON, given the various data types, becomes another challenge.
+4. Despite these challenges, we successfully added comprehensive and flexible record-keeping capabilities to the system.
 
-3. Pairing feature: 
-  1. This task is of medium difficulty. The main effort involved taking references of elderly and volunteer information instead of copying it, so that when a person's information is edited, deleted, or searched, the corresponding pairing situation can be displayed.
+**Deleting records**
 
-4. Editing records:
-  1. This task is of medium difficulty. We had to correctly handle all possible correct and incorrect inputs, particularly when we had an 'edit' command that was usable by both elderly and volunteer users.
-  2. Through careful unit testing and debugging, we successfully implemented a feature that automatically ignored inapplicable edit fields and update all applicable information.
+1. This task is of medium difficulty. We managed to implement logic checks ensuring the logical correctness of deletion. For example, when deleting an elderly record, we also had to delete all of its existing pairs. To ensure the accuracy and correctness, we wrote many unit test cases. 
+2. Through careful testing and debugging, we successfully implemented a reliable and robust deletion feature.
 
-5. Finding records:
-  1. Finding information was of high difficulty. We had to correctly handle different possible situations, such as when a user entered a wrong field format or a field that was not applicable to the person or when different searching formats were used for enums, date tags, etc. 
-  2. Additionally, we had to simultaneously filter elderly, volunteer, and pair cards and display all possible information.
-  3. Through extensive testing and refinement, we successfully implemented a powerful and flexible searching feature.
+**Pairing feature** 
 
-6. Command Recommendation:
-  1. Implementing the command recommendation feature was of high difficulty. The main challenges were showing the correct command recommendations as the user typed each character and throwing warnings at the correct times.
-  2. For example, the main challenges include that we had to distinguish between "wrong command" and "incomplete command", as well as detecting existing attributes to avoid repetitive recommendations.
-  3. For this feature, we make use of the [Agolia Documentaiton](https://www.algolia.com/doc/guides/solutions/ecommerce/search/autocomplete/predictive-search-suggestions/) 
-  4. We successfully achieved this feature, which effectively increased input speed and user satisfaction.
+1. This task is of medium difficulty. The main effort involved taking references of elderly and volunteer information instead of copying it, so that when a person's information is edited, deleted, or searched, the corresponding pairing situation can be displayed.
+
+**Editing records**
+
+1. This task is of medium difficulty. We had to correctly handle all possible correct and incorrect inputs, particularly when we had an 'edit' command that was usable by both elderly and volunteer users.
+2. Through careful unit testing and debugging, we successfully implemented a feature that automatically ignored non-applicable edit fields and update all applicable information.
+
+**Finding records**
+
+1. Finding information was of high difficulty. We had to correctly handle different possible situations, such as when a user entered a wrong field format or a field that was not applicable to the person or when different searching formats were used for enums, date tags, etc. 
+2. Additionally, we had to simultaneously filter elderly, volunteer, and pair cards and display all possible information.
+3. Through extensive testing and refinement, we successfully implemented a powerful and flexible searching feature.
+
+**Command Recommendation**
+
+1. Implementing the command recommendation feature was of high difficulty. The main challenges were showing the correct command recommendations as the user typed each character and throwing warnings at the correct times.
+2. For example, the main challenges include that we had to distinguish between "wrong command" and "incomplete command", as well as detecting existing attributes to avoid repetitive recommendations.
+3. For this feature, we make use of the [Agolia Documentation](https://www.algolia.com/doc/guides/solutions/ecommerce/search/autocomplete/predictive-search-suggestions/) 
+4. We successfully achieved this feature, which effectively increased input speed and user satisfaction.
 
 
 --------------------------------------------------------------------------------------------------------------------
-## Glossary
 
-| Term                  | Definition                                                                                                                                                  |
-|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Command               | An instruction given by you to FriendlyLink to perform a specific task.                                                                                     |
-| Date                  | A date representing the timestamp of an event, in the format `YYYY-MM-DD`                                                                                   |
-| Duplicate Pairs       | Two pairs having the same elderly and volunteer are considered a duplicate entry in FriendlyLink                                                            |
-| Duplicate Persons     | Two persons having the same NRIC are considered a duplicate entry in FriendlyLink                                                                           |
-| Elderly               | Elderly are people under the care of your VWO                                                                                                               |
-| Email                 | The email of a person, in the `localPart@domain` format, containing the `@`                                                                                 |
-| FriendlyLink          | The name of our application                                                                                                                                 |
-| Field                 | A field is the information following the slash in a command.                                                                                                |
-| Index                 | An index represents the position of the referred item in a displayed list of persons. It must be a positive integer.                                        |
-| Medical Qualification | The level of care taking or first aid of a volunteer. It consists of the type of skill (E.g. CP, AED) and a skill level (`BASIC`, `INTERMEDIATE` or `HIGH`) |
-| NRIC                  | A unique identifier given to all Singaporeans. It is case-insensitive.                                                                                      |
-| Pair                  | A pair consists of an elderly and a volunteer assigned to accompany and take care of the elderly                                                            | 
-| Phone number          | The phone number of a person. Must be numeric and has more than 3 digits                                                                                    |
-| Prefixes              | Prefixes are the characters appearing before a slash in a command. Prefixes describe the field that they represent.                                         |
-| Region                | The general portion of area in Singapore. Must be one of the following values: `NORTH`, `NORTHEAST`, `CENTRAL`, `WEST` or `EAST`                            |
-| Risk level            | The susceptibility level of an elderly to injury or sickness. Must be one of the following values: `LOW`, `MEDIUM` or `HIGH`                                |
-| Tag                   | A generic description for a group of people. Must contain only alphanumeric characters                                                                      |
-| Volunteer             | Volunteers that signed up to pair up with and accompany elderly members                                                                                     |
-| VWO                   | Voluntary Welfare Organisations such as yourself                                                                                                            |
+## Glossary
+These terms have specific meanings in the context of FriendlyLink. 
+
+### Non-Technical
+
+| Term                  | Meaning                                                                                                              |
+|-----------------------|----------------------------------------------------------------------------------------------------------------------|
+| Availability Date     | The availability of a person.                                                                                        |
+| BirthDate             | The birth date of a person.                                                                                          |
+| Command               | An instruction given by you to FriendlyLink to perform a specific task.                                              |
+| Date                  | The date of an event.                                                                                                |
+| Duplicate Pairs       | Two pairs having the same elderly and volunteer are considered a duplicate entry in FriendlyLink.                    |
+| Duplicate Persons     | Two persons having the same NRIC are considered a duplicate entry in FriendlyLink.                                   |
+| Elderly               | Elderly are people under the care of your VWO.                                                                       |
+| Email                 | The email of a person.                                                                                               |
+| FriendlyLink          | The name of our application.                                                                                         |
+| Field                 | A field is the information following the slash in a command.                                                         |
+| Index                 | An index represents the position of the referred item in a displayed list of persons.                                |
+| Medical Qualification | The level of care taking or first aid of a volunteer. It consists of the skill name and a skill level.               |
+| NRIC                  | A unique identifier given to all Singaporeans. It is case-insensitive.                                               |
+| Pair                  | A pair consists of an elderly and a volunteer assigned to accompany and take care of the elderly.                    | 
+| Phone number          | The phone number of a person.                                                                                        |
+| Prefix                | Prefix refers to the characters appearing before a slash in a command. Prefix describe the field that it represents. |
+| Region                | The general portion of area in Singapore.                                                                            |
+| Risk level            | The susceptibility level of an elderly to injury or sickness.                                                        |
+| Tag                   | A generic description for a group of people.                                                                         |
+| Volunteer             | Volunteers that signed up to pair up with and accompany elderly members.                                             |
+| VWO                   | Voluntary Welfare Organisations such as yourself.                                                                    |
+
+### Technical
+
+| Term     | Meaning                                                                                                                                                                                  |
+|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Java     | Java is a programming language that FriendlyLink is written in. It is required to run the application.                                                                                   |
+| JAR      | Java Archive (JAR) is a package file format typically used to aggregate many Java class files and associated metadata and resources (text, images, etc.) into one file for distribution. |
+| JSON     | JavaScript Object Notation. A lightweight data format that is easy for both humans and computers to read and write.                                                                      |
+| Terminal | The terminal is an interface that lets you access the command line.                                                                                                                      |
